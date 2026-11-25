@@ -1,0 +1,1100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blu-ray, up close</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E3E8ED; --panel:#F3F5F7; --ink:#17202B; --ink2:#4B5664; --rule:#C2CBD4;
+  --body2:#26303C; --tabs:#D3DAE1; --hover:#9AA6B2; --laser:#7A2ED0; --stage:#0D131A;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#11171E; --panel:#1A222B; --ink:#E4E9EE; --ink2:#9AA6B2; --rule:#2D3844;
+    --body2:#C9D1D9; --tabs:#1E2730; --hover:#4B5664; --laser:#A87BEE; --stage:#0A0F15;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#11171E; --panel:#1A222B; --ink:#E4E9EE; --ink2:#9AA6B2; --rule:#2D3844;
+  --body2:#C9D1D9; --tabs:#1E2730; --hover:#4B5664; --laser:#A87BEE; --stage:#0A0F15;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font:15px/1.5 "Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:20px 28px 14px;border-bottom:1px solid var(--rule)}
+h1{font-family:Newsreader,Georgia,serif;font-weight:500;font-size:clamp(26px,3vw,36px);line-height:1.1;letter-spacing:-.01em;margin:0}
+.sub{margin:4px 0 0;color:var(--ink2);font-size:14px}
+.tabs{display:flex;gap:3px;background:var(--tabs);padding:3px;border-radius:9px;flex-shrink:0}
+.tabs button{font:inherit;font-size:14.5px;border:0;background:transparent;padding:7px 15px;border-radius:7px;color:var(--ink2);cursor:pointer}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--panel);color:var(--ink);box-shadow:0 1px 0 rgba(23,32,43,.14)}
+main{padding:18px 28px 6px}
+.pane{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;height:calc(100vh - 160px);min-height:540px}
+.pane[hidden]{display:none}
+.stage{position:relative;background:var(--stage);border-radius:10px;overflow:hidden}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.hint{position:absolute;left:14px;bottom:10px;color:#8794A2;font-size:12.5px;pointer-events:none}
+.side{overflow:auto;padding:0 4px 12px 0}
+.side h2{font-family:Newsreader,Georgia,serif;font-weight:500;font-size:25px;line-height:1.15;margin:0 0 8px}
+.lede{font-family:Newsreader,Georgia,serif;font-size:17px;line-height:1.5;color:var(--body2);margin:0 0 16px}
+.ctl{margin:16px 0}
+.lab{display:flex;justify-content:space-between;align-items:baseline;font-size:13.5px;color:var(--ink2);margin-bottom:6px}
+output,.num{color:var(--ink);font-variant-numeric:tabular-nums}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:7px;overflow:hidden;background:var(--panel)}
+.seg button{border:0;background:transparent;padding:6px 12px;font:inherit;font-size:14px;cursor:pointer;color:var(--ink2)}
+.seg button+button{border-left:1px solid var(--rule)}
+.seg button.on{background:var(--ink);color:var(--paper)}
+input[type=range]{width:100%;accent-color:var(--laser);margin:0}
+.btns{display:flex;flex-wrap:wrap;gap:6px}
+.btn{font:inherit;font-size:14px;border:1px solid var(--rule);background:var(--panel);color:var(--ink);padding:6px 11px;border-radius:7px;cursor:pointer}
+.btn:hover{border-color:var(--hover)}
+.btn.primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.check{display:flex;align-items:center;gap:8px;font-size:14px;margin:6px 0;cursor:pointer}
+.check input{accent-color:var(--laser);width:16px;height:16px;margin:0}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:5px 16px;font-size:14px;margin:18px 0;padding:12px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.facts dt{color:var(--ink2)}
+.facts dd{margin:0;text-align:right;font-variant-numeric:tabular-nums}
+.note{font-size:14.5px;color:var(--body2);margin:10px 0}
+.eq{font-family:Newsreader,Georgia,serif;font-style:italic;font-size:18px;margin:10px 0}
+.probe{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:10px 12px;font-size:14px;min-height:64px}
+.swatch{display:inline-block;width:11px;height:11px;border-radius:2px;vertical-align:-1px;margin-right:5px}
+.phasor{position:relative;height:190px;background:var(--stage);border-radius:8px;overflow:hidden;margin:10px 0 6px}
+.phasor canvas{position:absolute;inset:0;width:100%;height:100%}
+.verdict{font-size:14.5px;margin:8px 0;padding-left:10px;border-left:3px solid var(--laser)}
+.steps{list-style:none;padding:0;margin:10px 0 0}
+.steps button{display:flex;gap:10px;width:100%;text-align:left;background:none;border:0;padding:5px 8px;border-radius:6px;font:inherit;font-size:14px;color:var(--ink2);cursor:pointer}
+.steps button:hover{color:var(--ink)}
+.steps .n{width:1.5em;flex-shrink:0;text-align:right;color:#8A96A3;font-variant-numeric:tabular-nums}
+.steps button.on{background:var(--panel);color:var(--ink)}
+.steps button.on .n{color:var(--laser)}
+.stephead{font-size:13.5px;color:var(--ink2);margin:0}
+.side h3{font-family:Newsreader,Georgia,serif;font-weight:500;font-size:21px;margin:2px 0 6px}
+.chips{margin:8px 0}
+.chips span{display:inline-block;font-size:12.5px;padding:2px 9px;border:1px solid var(--rule);border-radius:20px;margin:0 6px 6px 0;color:var(--ink2);background:var(--panel)}
+.timeline{margin:16px 0 4px;font-size:13px;color:var(--ink2)}
+.tbar{display:flex;height:12px;border-radius:3px;overflow:hidden;background:var(--tabs);margin:4px 0 2px}
+.tbar span{display:block;height:100%;transition:filter .2s,opacity .2s;opacity:.55}
+.tbar span.on{opacity:1}
+.tkey{display:flex;justify-content:space-between;gap:8px}
+.tiny{display:flex;align-items:center;gap:8px;margin-top:8px}
+.tiny i{display:block;width:2px;height:12px;background:#9C6BD8}
+:focus-visible{outline:2px solid var(--laser);outline-offset:2px}
+footer{padding:6px 28px 18px;color:var(--ink2);font-size:12.5px;max-width:1100px}
+@media (max-width:920px){
+  header{flex-direction:column;align-items:flex-start;padding:14px 16px 12px}
+  main{padding:12px 16px}
+  .pane{grid-template-columns:1fr;height:auto;min-height:0}
+  .stage{height:62vh;min-height:340px}
+  footer{padding:6px 16px 16px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>The Blu-ray disc, up close</h1>
+    <p class="sub">Interactive companion to Homework 2, Nanotechnologies and Nanoelectronics, IST 2026/27</p>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="Views">
+    <button role="tab" data-tab="zoom" aria-selected="true">Zoom</button>
+    <button role="tab" data-tab="rainbow" aria-selected="false">Rainbow</button>
+    <button role="tab" data-tab="lasers" aria-selected="false">Lasers</button>
+    <button role="tab" data-tab="fab" aria-selected="false">Fabrication</button>
+  </nav>
+</header>
+
+<main>
+<!-- ZOOM -->
+<section class="pane" id="tab-zoom" role="tabpanel">
+  <div class="stage"><canvas id="zoomCanvas" aria-label="Zoomable view of the disc surface"></canvas><div class="hint">Scroll to zoom, drag to move</div></div>
+  <div class="side">
+    <h2>Zoom into the disc</h2>
+    <p class="lede">From the whole 12&nbsp;cm disc down to single pits, five orders of magnitude in one slider.</p>
+    <div class="ctl"><div class="lab">Disc</div>
+      <div class="seg" id="zoomFmt"><button data-v="CD">CD</button><button data-v="DVD">DVD</button><button data-v="BD" class="on">Blu-ray</button></div></div>
+    <div class="ctl"><div class="lab"><span>Field of view</span><output id="zoomOut"></output></div>
+      <input type="range" id="zoomRange" min="0" max="1000" value="0" aria-label="Field of view"></div>
+    <div class="btns" id="zoomJump">
+      <button class="btn" data-k="disc">Whole disc</button><button class="btn" data-k="mm">1 mm</button><button class="btn" data-k="hair">Hair</button><button class="btn" data-k="tracks">Tracks</button><button class="btn" data-k="pits">Pits</button>
+    </div>
+    <div class="ctl">
+      <label class="check"><input type="checkbox" id="zSpot" checked> Show the read spot</label>
+      <label class="check"><input type="checkbox" id="zRefs" checked> Show a hair and a dust grain for scale</label>
+    </div>
+    <p class="note" id="zoomNote"></p>
+    <dl class="facts" id="zoomFacts"></dl>
+  </div>
+</section>
+
+<!-- RAINBOW -->
+<section class="pane" id="tab-rainbow" role="tabpanel" hidden>
+  <div class="stage"><canvas id="rbCanvas" aria-label="Disc lit by a lamp, showing diffraction colours"></canvas><div class="hint">Drag to walk around the disc, scroll to move closer</div></div>
+  <div class="side">
+    <h2>Where the colours come from</h2>
+    <p class="lede">The tracks work as a diffraction grating. A Blu-ray only shows colour when you look from a low angle with the light near your eye: its tracks are too close for any other geometry.</p>
+    <div class="ctl"><div class="lab">Disc</div>
+      <div class="seg" id="rbFmt"><button data-v="CD">CD</button><button data-v="DVD">DVD</button><button data-v="BD" class="on">Blu-ray</button></div></div>
+    <div class="ctl"><div class="lab">Look at it</div>
+      <div class="btns" id="rbViews"><button class="btn" data-k="side">From the side</button><button class="btn" data-k="top">From above</button><button class="btn" data-k="across">Lamp across the table</button></div></div>
+    <label class="check"><input type="checkbox" id="rbFlash" checked> Light at your eye, like a phone torch</label>
+    <div class="ctl" id="lampCtl"><div class="lab"><span>Lamp direction</span><output id="lazOut"></output></div><input type="range" id="rbLaz" min="-180" max="180" value="-50" aria-label="Lamp direction">
+      <div class="lab" style="margin-top:10px"><span>Lamp height</span><output id="lelOut"></output></div><input type="range" id="rbLel" min="5" max="88" value="40" aria-label="Lamp height"></div>
+    <div class="ctl"><div class="lab"><span>Size of the light source</span></div><input type="range" id="rbSig" min="10" max="160" value="60" aria-label="Size of the light source"></div>
+    <p class="eq">λ = p (sin α + sin β) / m</p>
+    <p class="note" id="rbMax"></p>
+    <div class="probe" id="rbProbe">Point at the disc to see which colour reaches your eye from there.</div>
+  </div>
+</section>
+
+<!-- LASERS -->
+<section class="pane" id="tab-lasers" role="tabpanel" hidden>
+  <div class="stage"><canvas id="lzCanvas" aria-label="Laser reading the disc"></canvas></div>
+  <div class="side">
+    <div class="seg" id="lzMode" style="margin-bottom:16px"><button data-v="read" class="on">Reading head</button><button data-v="pointer">Laser pointer</button></div>
+    <div id="readSide">
+      <h2>Reading the pits</h2>
+      <p class="lede">The spot is wider than the pit on purpose. Part of the light comes back from the pit floor half a wavelength late and cancels the light from the flat land around it. In the side cut, dashed wavefronts go down and solid ones come back up.</p>
+      <div class="ctl"><div class="lab">Disc</div>
+        <div class="seg" id="rdDisc"><button data-v="CD">CD</button><button data-v="DVD">DVD</button><button data-v="BD" class="on">Blu-ray</button></div></div>
+      <div class="ctl"><div class="lab">Laser in the player</div>
+        <div class="seg" id="rdLaser"><button data-v="780">780 nm</button><button data-v="650">650 nm</button><button data-v="405" class="on">405 nm</button></div></div>
+      <div class="ctl"><div class="lab"><span>Numerical aperture</span><output id="naOut"></output></div><input type="range" id="rdNA" min="0.30" max="0.95" step="0.01" value="0.85" aria-label="Numerical aperture"></div>
+      <div class="ctl"><div class="lab"><span>Pit depth</span><output id="dOut"></output></div><input type="range" id="rdD" min="0" max="180" step="1" value="68" aria-label="Pit depth"></div>
+      <div class="btns"><button class="btn primary" id="rdPlay">Pause</button><button class="btn" id="rdMatch">Use the matching player</button></div>
+      <div class="phasor"><canvas id="phCanvas" aria-label="Phasor sum of the reflected light"></canvas></div>
+      <p class="verdict" id="rdVerdict"></p>
+      <dl class="facts" id="rdFacts"></dl>
+    </div>
+    <div id="ptrSide" hidden>
+      <h2>A laser pointer on the disc</h2>
+      <p class="lede">The tracks split the beam into spots on the wall. On a Blu-ray a red pointer held straight on gives no side spot at all.</p>
+      <div class="ctl"><div class="lab">Disc</div>
+        <div class="seg" id="ptDisc"><button data-v="CD">CD</button><button data-v="DVD">DVD</button><button data-v="BD" class="on">Blu-ray</button></div></div>
+      <div class="ctl"><div class="lab"><span>Wavelength</span><output id="ptLOut"></output></div><input type="range" id="ptL" min="400" max="700" value="650" aria-label="Wavelength">
+        <div class="btns" style="margin-top:8px"><button class="btn" data-l="405">Violet 405</button><button class="btn" data-l="532">Green 532</button><button class="btn" data-l="650">Red 650</button></div></div>
+      <div class="ctl"><div class="lab"><span>Angle of the pointer</span><output id="ptAOut"></output></div><input type="range" id="ptA" min="0" max="85" step="0.5" value="0" aria-label="Angle of the pointer"></div>
+      <button class="btn" id="ptLittrow">Send the beam back to the pointer</button>
+      <p class="eq">sin β = sin α + m λ / p</p>
+      <dl class="facts" id="ptFacts"></dl>
+      <p class="note" id="ptNote"></p>
+    </div>
+  </div>
+</section>
+
+<!-- FABRICATION -->
+<section class="pane" id="tab-fab" role="tabpanel" hidden>
+  <div class="stage"><canvas id="fabCanvas" aria-label="Cross-section of each fabrication step"></canvas><div class="hint">Cross-sections, not to scale. Arrow keys change step.</div></div>
+  <div class="side">
+    <h2>Making a Blu-ray</h2>
+    <p class="stephead" id="fabCount"></p>
+    <h3 id="fabTitle"></h3>
+    <div class="chips" id="fabChips"></div>
+    <p class="note" id="fabText"></p>
+    <div class="btns"><button class="btn" id="fabPrev">Previous</button><button class="btn primary" id="fabPlay">Play all</button><button class="btn" id="fabNext">Next</button></div>
+    <div class="timeline">
+      <div class="tkey"><span>Once per title: master and stamper</span><span class="num">≈ 5 h</span></div>
+      <div class="tbar" id="tbar"><span data-s="2" style="flex:1.55;background:#7A2ED0"></span><span data-s="3" style="flex:1.05;background:#3C7FA8"></span><span data-s="5" style="flex:2.4;background:#7E868F"></span></div>
+      <div class="tkey"><span>laser writing 1.55 h</span><span>develop, inspect</span><span>nickel 2.4 h</span></div>
+      <div class="tiny"><i></i><span>Every disc after that: about 4 s</span></div>
+    </div>
+    <ol class="steps" id="fabList"></ol>
+  </div>
+</section>
+</main>
+
+<footer>Format numbers from the Blu-ray Disc Association BD-ROM specifications; mastering from Kouchiyama et al., Jpn. J. Appl. Phys. 42, 769 (2003). Pit width, plating current and process times are estimates. The reading signal uses a scalar model: the light reflected inside the spot is added with the phase picked up in each pit.</footer>
+
+<script>
+(() => {
+'use strict';
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const TAU = Math.PI * 2, rad = d => d * Math.PI / 180, deg = r => r * 180 / Math.PI;
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const ease = t => t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t);
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const NB = ' ';
+
+/* ---------- formats ---------- */
+const FMT = {
+  CD:  {key:'CD',  name:'CD',      lambda:780, NA:0.45, pitch:1600, T:277.7, rmin:3, rmax:11, pitW:500, depth:110, r0:25e6, r1:58e6, cap:'0.7 GB', tint:[.92,.93,.96]},
+  DVD: {key:'DVD', name:'DVD',     lambda:650, NA:0.60, pitch:740,  T:133.3, rmin:3, rmax:11, pitW:320, depth:100, r0:24e6, r1:58e6, cap:'4.7 GB', tint:[.86,.82,.93]},
+  BD:  {key:'BD',  name:'Blu-ray', lambda:405, NA:0.85, pitch:320,  T:74.5,  rmin:2, rmax:8,  pitW:130, depth:68,  r0:24e6, r1:58e6, cap:'25 GB',  tint:[.80,.78,.82]}
+};
+const spotOf = (l, na) => 0.514 * l / na;
+const trackKm = f => Math.PI * ((f.r1/1e6)**2 - (f.r0/1e6)**2) / (f.pitch * 1e-6) / 1e6;
+
+function waveRGB(w) {
+  let r = 0, g = 0, b = 0;
+  if (w >= 380 && w < 440) { r = (440 - w) / 60; b = 1; }
+  else if (w < 490) { g = (w - 440) / 50; b = 1; }
+  else if (w < 510) { g = 1; b = (510 - w) / 20; }
+  else if (w < 580) { r = (w - 510) / 70; g = 1; }
+  else if (w < 645) { r = 1; g = (645 - w) / 65; }
+  else if (w <= 800) { r = 1; }
+  let f = w < 420 ? .3 + .7 * (w - 380) / 40 : w > 700 ? Math.max(.25, .3 + .7 * (780 - w) / 80) : 1;
+  if (w < 380) f = 0;
+  return [r, g, b].map(c => Math.round(255 * Math.pow(Math.max(0, c * f), .8)));
+}
+const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+function colourName(w) {
+  if (w < 450) return 'violet'; if (w < 490) return 'blue'; if (w < 520) return 'cyan';
+  if (w < 565) return 'green'; if (w < 590) return 'yellow'; if (w < 625) return 'orange'; return 'red';
+}
+
+/* ---------- pseudo-random pits ---------- */
+function rng(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+const seedOf = (a, b, c) => (Math.imul(a | 0, 73856093) ^ Math.imul(b | 0, 19349663) ^ Math.imul(c | 0, 83492791)) >>> 0;
+function pickRun(f, r) { let L = f.rmin; while (L < f.rmax && r() < 0.42) L++; return L; }
+const cache = new Map();
+function chunkPits(f, n, k) {
+  const key = f.key + n + ':' + k; let v = cache.get(key); if (v) return v;
+  if (cache.size > 30000) cache.clear();
+  const C = 96 * f.T, r = rng(seedOf(n, k, f.pitch)); v = [];
+  let u = k * C; const end = u + C; let pit = r() < 0.5;
+  while (u < end) { const b = Math.min(u + pickRun(f, r) * f.T, end); if (pit && b - u > f.rmin * f.T * 0.99) v.push(u, b); u = b; pit = !pit; }
+  cache.set(key, v); return v;
+}
+
+function fmtLen(nm) {
+  if (nm >= 1e6) return +(nm / 1e6).toPrecision(3) + NB + 'mm';
+  if (nm >= 1e3) return +(nm / 1e3).toPrecision(3) + NB + 'µm';
+  return Math.round(nm) + NB + 'nm';
+}
+
+/* ---------- canvas helpers ---------- */
+const canvases = [];
+function mkCanvas(id, gl) {
+  const cv = document.getElementById(id), o = {cv, W: 0, H: 0, dpr: 1, dirty: true};
+  if (!gl) o.ctx = cv.getContext('2d');
+  new ResizeObserver(() => sizeCanvas(o)).observe(cv.parentElement);
+  canvases.push(o); sizeCanvas(o); return o;
+}
+function sizeCanvas(o) {
+  const r = o.cv.parentElement.getBoundingClientRect(); if (!r.width || !r.height) return;
+  o.dpr = Math.min(window.devicePixelRatio || 1, 2); o.W = r.width; o.H = r.height;
+  o.cv.width = Math.round(o.W * o.dpr); o.cv.height = Math.round(o.H * o.dpr); o.dirty = true;
+}
+function begin(o) { const c = o.ctx; c.setTransform(o.dpr, 0, 0, o.dpr, 0, 0); return c; }
+function seg(el, onPick) { el.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; [...el.children].forEach(x => x.classList.toggle('on', x === b)); onPick(b.dataset.v); }); }
+function setSeg(el, v) { [...el.children].forEach(x => x.classList.toggle('on', x.dataset.v === v)); }
+function facts(el, rows) { el.innerHTML = rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join(''); }
+const UI_FONT = '"Public Sans", system-ui, sans-serif';
+
+function drawPit(c, x0, x1, y, w) {
+  if (x1 - x0 < 0.4) return;
+  if (w < 2.2) { c.fillStyle = '#4A5566'; c.fillRect(x0, y - w / 2, x1 - x0, Math.max(w, 0.8)); return; }
+  const r = Math.min(w / 2, (x1 - x0) / 2);
+  if (w > 14) {
+    const g = c.createLinearGradient(0, y - w / 2, 0, y + w / 2);
+    g.addColorStop(0, '#8C98A8'); g.addColorStop(.2, '#4D596A'); g.addColorStop(.72, '#3A4555'); g.addColorStop(1, '#717E8F');
+    c.fillStyle = g;
+  } else c.fillStyle = '#4A5566';
+  c.beginPath(); c.roundRect(x0, y - w / 2, x1 - x0, w, r); c.fill();
+  if (w > 14) { c.strokeStyle = 'rgba(255,255,255,.32)'; c.lineWidth = 1; c.stroke(); }
+}
+function label(c, x, y, text, col = '#D5DCE3', size = 12.5, align = 'left') {
+  c.font = `${size}px ${UI_FONT}`; c.textAlign = align; c.textBaseline = 'middle';
+  c.fillStyle = 'rgba(13,19,26,.55)'; const w = c.measureText(text).width;
+  const x0 = align === 'left' ? x - 4 : align === 'right' ? x - w - 4 : x - w / 2 - 4;
+  c.fillRect(x0, y - size * .75, w + 8, size * 1.5);
+  c.fillStyle = col; c.fillText(text, x, y);
+}
+
+/* =====================================================================
+   ZOOM
+   ===================================================================== */
+const ZC = mkCanvas('zoomCanvas');
+const F0 = {x: 0, y: -41e6};
+const FOVMAX = 1.45e8, FOVMIN = 700;
+const Z = {f: FMT.BD, cx: 0, cy: 0, fov: FOVMAX, spot: true, refs: true, tw: null, drag: null};
+const zr = $('#zoomRange');
+const fovToSlider = v => 1000 * Math.log(FOVMAX / v) / Math.log(FOVMAX / FOVMIN);
+const sliderToFov = v => FOVMAX * Math.pow(FOVMIN / FOVMAX, v / 1000);
+
+function clampCenter() { const r = Math.hypot(Z.cx, Z.cy), lim = 66e6; if (r > lim) { Z.cx *= lim / r; Z.cy *= lim / r; } }
+function zoomAbout(px, py, nf) {
+  nf = clamp(nf, FOVMIN, FOVMAX); const k = Math.pow(nf / Z.fov, 1.25);
+  Z.cx = px + (Z.cx - px) * k; Z.cy = py + (Z.cy - py) * k; Z.fov = nf; clampCenter(); syncZoom();
+}
+zr.addEventListener('input', () => { Z.tw = null; zoomAbout(F0.x, F0.y, sliderToFov(+zr.value)); });
+ZC.cv.addEventListener('wheel', e => {
+  e.preventDefault(); Z.tw = null;
+  const r = ZC.cv.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
+  const s = Math.min(ZC.W, ZC.H) / Z.fov, wx = Z.cx + (mx - ZC.W / 2) / s, wy = Z.cy + (my - ZC.H / 2) / s;
+  const nf = clamp(Z.fov * Math.exp(clamp(e.deltaY, -120, 120) * 0.0016), FOVMIN, FOVMAX), s2 = Math.min(ZC.W, ZC.H) / nf;
+  Z.fov = nf; Z.cx = wx - (mx - ZC.W / 2) / s2; Z.cy = wy - (my - ZC.H / 2) / s2; clampCenter(); syncZoom();
+}, {passive: false});
+ZC.cv.addEventListener('pointerdown', e => { Z.tw = null; Z.drag = {x: e.clientX, y: e.clientY}; ZC.cv.setPointerCapture(e.pointerId); });
+ZC.cv.addEventListener('pointermove', e => {
+  if (!Z.drag) return; const s = Math.min(ZC.W, ZC.H) / Z.fov;
+  Z.cx -= (e.clientX - Z.drag.x) / s; Z.cy -= (e.clientY - Z.drag.y) / s; Z.drag = {x: e.clientX, y: e.clientY}; clampCenter(); syncZoom();
+});
+ZC.cv.addEventListener('pointerup', () => Z.drag = null);
+ZC.cv.addEventListener('pointercancel', () => Z.drag = null);
+
+const PRE = {disc: [0, 0, FOVMAX * 0.96], mm: [F0.x, F0.y, 1.2e6], hair: [F0.x, F0.y, 2.6e5], tracks: [F0.x, F0.y, 1.5e4], pits: [F0.x, F0.y, 2.4e3]};
+$('#zoomJump').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; const [x, y, f] = PRE[b.dataset.k];
+  if (reduce) { Z.cx = x; Z.cy = y; Z.fov = f; syncZoom(); return; }
+  Z.tw = {t0: performance.now(), d: 1300, from: [Z.cx, Z.cy, Z.fov], to: [x, y, f]};
+});
+function zoomTween(now) {
+  const w = Z.tw; if (!w) return; let k = (now - w.t0) / w.d; if (k >= 1) { k = 1; Z.tw = null; }
+  const e = ease(k), lf = Math.log(w.from[2]) + (Math.log(w.to[2]) - Math.log(w.from[2])) * e;
+  Z.fov = Math.exp(lf); const den = w.to[2] - w.from[2];
+  const m = Math.abs(den) < 1 ? e : clamp((Z.fov - w.from[2]) / den, 0, 1);
+  Z.cx = w.from[0] + (w.to[0] - w.from[0]) * m; Z.cy = w.from[1] + (w.to[1] - w.from[1]) * m; syncZoom();
+}
+seg($('#zoomFmt'), v => { Z.f = FMT[v]; syncZoom(); });
+$('#zSpot').addEventListener('change', e => { Z.spot = e.target.checked; ZC.dirty = true; });
+$('#zRefs').addEventListener('change', e => { Z.refs = e.target.checked; ZC.dirty = true; });
+
+function syncZoom() {
+  const f = Z.f, v = Z.fov; zr.value = fovToSlider(v); $('#zoomOut').textContent = fmtLen(v);
+  const sp = spotOf(f.lambda, f.NA), shortest = Math.round(f.rmin * f.T);
+  let t;
+  if (v > 2e7) t = `The data sit in a ring between r = ${f.r0 / 1e6} and ${f.r1 / 1e6}${NB}mm. The small circle marks where the zoom is heading.`;
+  else if (v > 1.5e6) t = `The spiral is far too fine to see here. All ${trackKm(f).toFixed(1)}${NB}km of it only give the surface its sheen.`;
+  else if (v > 9e4) t = `A human hair is about 70${NB}µm thick: laid on this ${f.name} it would cover ${Math.round(70000 / f.pitch)} tracks.`;
+  else if (v > 8e3) t = `Neighbouring tracks are ${f.pitch}${NB}nm apart, ${f.pitch < 400 ? 'less than the wavelength of any visible light' : f.pitch < 750 ? 'about one wavelength of visible light' : 'a few wavelengths of visible light'}. A 0.5${NB}µm dust grain, the size an ISO${NB}5 cleanroom counts, covers about ${Math.max(1, Math.round(500 / f.pitch * 10) / 10)} tracks.`;
+  else t = `The shortest pit is ${shortest}${NB}nm long. The read spot (${Math.round(sp)}${NB}nm) is wider than the pit, and it has to be: the Lasers tab shows why.`;
+  $('#zoomNote').textContent = t;
+  facts($('#zoomFacts'), [
+    ['Capacity', f.cap], ['Track pitch', f.pitch + NB + 'nm'], ['Shortest pit', shortest + NB + 'nm'],
+    ['Pit width', f.pitW + NB + 'nm' + (f.key === 'BD' ? ' (estimate)' : '')], ['Read laser', `${f.lambda}${NB}nm, NA${NB}${f.NA}`],
+    ['Read spot', Math.round(sp) + NB + 'nm'], ['Spiral length', trackKm(f).toFixed(1) + NB + 'km']
+  ]);
+  ZC.dirty = true;
+}
+
+const ZCOL = {clamp: '#2B343E', mirror: '#CDD4DB', data: '#BAC2CB', rim: '#98A1AB'};
+const zones = f => [[0, 7.5e6, 'hole'], [7.5e6, 22e6, 'clamp'], [22e6, f.r0, 'mirror'], [f.r0, f.r1, 'data'], [f.r1, 59.6e6, 'mirror'], [59.6e6, 60e6, 'rim']];
+
+function drawZoom() {
+  const o = ZC, c = begin(o), W = o.W, H = o.H, f = Z.f, s = Math.min(W, H) / Z.fov;
+  c.fillStyle = '#0D131A'; c.fillRect(0, 0, W, H);
+  const ox = W / 2 - Z.cx * s, oy = H / 2 - Z.cy * s, rc = Math.hypot(Z.cx, Z.cy);
+  const D = Math.hypot(W, H) / 2 + 4, Dw = D / s, rlo = Math.max(0, rc - Dw), rhi = rc + Dw;
+  const w2s = (x, y) => [W / 2 + (x - Z.cx) * s, H / 2 + (y - Z.cy) * s];
+
+  if (Z.fov >= 1.5e5) {
+    for (const [a, b, k] of zones(f)) {
+      if (k === 'hole' || b < rlo || a > rhi) continue;
+      c.beginPath(); c.arc(ox, oy, b * s, 0, TAU); if (a > 0) c.arc(ox, oy, a * s, 0, TAU, true);
+      c.fillStyle = ZCOL[k]; c.fill();
+      if (k === 'data' && Z.fov > 1.5e6) {
+        const g = c.createConicGradient(-Math.PI / 2, ox, oy);
+        const hs = [200, 280, 330, 30, 60, 120, 180, 260, 320, 20, 70, 150, 200];
+        hs.forEach((h, i) => g.addColorStop(i / (hs.length - 1), `hsla(${h},60%,58%,0.17)`));
+        c.fillStyle = g; c.fill();
+        const lg = c.createLinearGradient(ox - 60e6 * s, oy - 60e6 * s, ox + 60e6 * s, oy + 60e6 * s);
+        lg.addColorStop(0, 'rgba(255,255,255,.16)'); lg.addColorStop(.5, 'rgba(255,255,255,0)'); lg.addColorStop(1, 'rgba(0,0,0,.12)');
+        c.fillStyle = lg; c.fill();
+      }
+    }
+    // track lines as arcs when resolvable
+    const p = f.pitch;
+    if (p * s >= 0.9) {
+      const a = Math.max(rlo, f.r0), b = Math.min(rhi, f.r1);
+      if (b > a && (b - a) / p < 1600) {
+        const inside = ox > 0 && ox < W && oy > 0 && oy < H;
+        let a0 = 0, a1 = TAU;
+        if (!inside) {
+          const mid = Math.atan2(H / 2 - oy, W / 2 - ox); let lo = 0, hi = 0;
+          for (const [x, y] of [[0, 0], [W, 0], [0, H], [W, H]]) { let d = Math.atan2(y - oy, x - ox) - mid; d = Math.atan2(Math.sin(d), Math.cos(d)); lo = Math.min(lo, d); hi = Math.max(hi, d); }
+          a0 = mid + lo; a1 = mid + hi;
+        }
+        c.strokeStyle = `rgba(70,82,98,${clamp((p * s - 0.9) / 2, 0, 1) * 0.5})`; c.lineWidth = Math.max(0.6, f.pitW * s);
+        const n0 = Math.ceil((a - f.r0) / p), n1 = Math.floor((b - f.r0) / p);
+        c.beginPath(); for (let n = n0; n <= n1; n++) { const R = (f.r0 + n * p) * s; c.moveTo(ox + R * Math.cos(a0), oy + R * Math.sin(a0)); c.arc(ox, oy, R, a0, a1); } c.stroke();
+      }
+    }
+    if (Z.fov > 5e7) {
+      const [fx, fy] = w2s(F0.x, F0.y);
+      c.strokeStyle = '#7A2ED0'; c.lineWidth = 2; c.beginPath(); c.arc(fx, fy, 7, 0, TAU); c.stroke();
+      const R = 41e6 * s;
+      label(c, ox - R * 0.72, oy - R * 0.72 - 4, `data zone, r = ${f.r0 / 1e6} to ${f.r1 / 1e6} mm`);
+      label(c, ox, oy, 'centre hole, 15 mm', '#D5DCE3', 12.5, 'center');
+      label(c, fx + 14, fy, 'zoom target');
+    }
+  } else {
+    const th = Math.atan2(Z.cy, Z.cx), tx = -Math.sin(th), ty = Math.cos(th);
+    c.save(); c.translate(W / 2, H / 2); c.rotate(Math.atan2(ty, tx));
+    for (const [a, b, k] of zones(f)) {
+      const y1 = -(a - rc) * s, y0 = -(b - rc) * s; if (y1 < -D || y0 > D) continue;
+      const top = Math.max(y0, -D), bot = Math.min(y1, D);
+      c.fillStyle = k === 'hole' ? '#0D131A' : ZCOL[k]; c.fillRect(-D, top, 2 * D, bot - top);
+    }
+    if (rc < f.r1 + Dw && rc > f.r0 - Dw) {
+      const g = c.createLinearGradient(-D, -D, D, D); g.addColorStop(0, 'rgba(255,255,255,.10)'); g.addColorStop(1, 'rgba(0,0,0,.08)');
+      c.fillStyle = g; c.fillRect(-D, -D, 2 * D, 2 * D);
+    }
+    const p = f.pitch, nMax = Math.floor((f.r1 - f.r0) / p);
+    const n0 = Math.max(0, Math.ceil((rc - Dw - f.r0) / p)), n1 = Math.min(nMax, Math.floor((rc + Dw - f.r0) / p));
+    const pitPx = f.rmin * f.T * s, wpx = f.pitW * s;
+    if (n1 >= n0 && p * s >= 0.8) {
+      if (pitPx < 1.3) {
+        c.fillStyle = `rgba(70,82,98,${clamp((p * s - 0.8) / 2, 0, 1) * 0.55})`;
+        for (let n = n0; n <= n1; n++) { const y = -(f.r0 + n * p - rc) * s, w = Math.max(wpx, 0.7); c.fillRect(-D, y - w / 2, 2 * D, w); }
+      } else {
+        const C = 96 * f.T;
+        for (let n = n0; n <= n1; n++) {
+          const rn = f.r0 + n * p, y = -(rn - rc) * s, ac = rn * th, al = ac - Dw, ah = ac + Dw;
+          for (let k = Math.floor(al / C); k <= Math.floor(ah / C); k++) {
+            const arr = chunkPits(f, n, k);
+            for (let i = 0; i < arr.length; i += 2) { const x0 = (arr[i] - ac) * s, x1 = (arr[i + 1] - ac) * s; if (x1 < -D || x0 > D) continue; drawPit(c, x0, x1, y, wpx); }
+          }
+        }
+      }
+    }
+    c.restore();
+  }
+
+  // hair
+  if (Z.refs && Z.fov > 9e4 && Z.fov < 7e6) {
+    const P = {x: F0.x - 30e3, y: F0.y + 8e3}, a = rad(-17), dx = Math.cos(a), dy = Math.sin(a), L = 4e6, hw = 35e3;
+    const [x0, y0] = w2s(P.x - dx * L, P.y - dy * L), [x1, y1] = w2s(P.x + dx * L, P.y + dy * L);
+    const [g0x, g0y] = w2s(P.x + dy * hw, P.y - dx * hw), [g1x, g1y] = w2s(P.x - dy * hw, P.y + dx * hw);
+    const g = c.createLinearGradient(g0x, g0y, g1x, g1y);
+    g.addColorStop(0, 'rgba(60,38,24,0)'); g.addColorStop(.06, 'rgba(84,56,36,.92)'); g.addColorStop(.35, 'rgba(128,92,62,.9)');
+    g.addColorStop(.5, 'rgba(160,122,86,.88)'); g.addColorStop(.72, 'rgba(112,78,50,.9)'); g.addColorStop(.94, 'rgba(76,50,32,.92)'); g.addColorStop(1, 'rgba(60,38,24,0)');
+    c.strokeStyle = g; c.lineWidth = 2 * hw * s; c.lineCap = 'butt'; c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1, y1); c.stroke();
+    // nearest point on the strand to the screen centre, for the label
+    const t = (Z.cx - P.x) * dx + (Z.cy - P.y) * dy; const [lx, ly] = w2s(P.x + dx * t, P.y + dy * t);
+    label(c, lx + 12, ly - hw * s - 14, 'human hair, about 70 µm');
+  }
+  // dust grain
+  if (Z.refs && Z.fov < 4e4 && Z.fov > 900) {
+    const P = {x: F0.x + 720, y: F0.y + 380}, [px, py] = w2s(P.x, P.y), R = 250 * s;
+    const rr = [1, .86, 1.08, .93, 1.12, .9, 1.02, .84, 1.06];
+    c.save(); c.shadowColor = 'rgba(0,0,0,.35)'; c.shadowBlur = R * 0.25; c.shadowOffsetY = R * 0.1;
+    const g = c.createRadialGradient(px - R * .3, py - R * .35, R * .1, px, py, R * 1.1);
+    g.addColorStop(0, '#A08C74'); g.addColorStop(1, '#4E4134'); c.fillStyle = g; c.beginPath();
+    rr.forEach((q, i) => { const a = i / rr.length * TAU; const x = px + Math.cos(a) * R * q, y = py + Math.sin(a) * R * q; i ? c.lineTo(x, y) : c.moveTo(x, y); });
+    c.closePath(); c.fill(); c.restore();
+    label(c, px + R + 10, py, 'dust grain, 0.5 µm');
+  }
+  // read spot
+  if (Z.spot && Z.fov < 7e4) {
+    const n = Math.round((rc - f.r0) / f.pitch), rn = f.r0 + n * f.pitch;
+    if (rn > f.r0 && rn < f.r1) {
+      const th = Math.atan2(Z.cy, Z.cx), [px, py] = w2s(rn * Math.cos(th), rn * Math.sin(th));
+      const F = spotOf(f.lambda, f.NA), col = waveRGB(f.lambda), R = 1.25 * F * s;
+      const g = c.createRadialGradient(px, py, 0, px, py, R);
+      for (let i = 0; i <= 8; i++) { const x = i / 8 * 1.25; g.addColorStop(i / 8, rgba(col, 0.62 * Math.exp(-4 * Math.LN2 * x * x))); }
+      c.fillStyle = g; c.beginPath(); c.arc(px, py, R, 0, TAU); c.fill();
+      c.setLineDash([5, 4]); c.strokeStyle = rgba(col, .95); c.lineWidth = 1.5; c.beginPath(); c.arc(px, py, F / 2 * s, 0, TAU); c.stroke(); c.setLineDash([]);
+      if (F * s > 12) label(c, px + F / 2 * s + 10, py - F / 2 * s, `read spot, ${Math.round(F)} nm`);
+    }
+  }
+  // scale bar
+  const target = W * 0.2 / s, e10 = Math.pow(10, Math.floor(Math.log10(target)));
+  const len = [5, 2, 1].map(m => m * e10).find(v => v <= target) || e10, px = len * s;
+  c.fillStyle = '#E4E9EE'; c.fillRect(W - 24 - px, H - 26, px, 3);
+  c.font = `12.5px ${UI_FONT}`; c.textAlign = 'right'; c.textBaseline = 'alphabetic'; c.fillText(fmtLen(len), W - 24, H - 34);
+}
+
+/* =====================================================================
+   RAINBOW  (WebGL)
+   ===================================================================== */
+const RC = mkCanvas('rbCanvas', true);
+const gl = RC.cv.getContext('webgl', {antialias: false, preserveDrawingBuffer: true});
+const RB = {f: FMT.BD, az: -90, el: 24, dist: 150, laz: -50, lel: 40, sigma: 0.06, flash: true, drag: null};
+let prog, U = {};
+const VS = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+const FS = `precision highp float;
+uniform vec2 uRes;uniform vec3 uCam,uF,uR,uU,uL,uTint;uniform float uTan,uP,uS,uR0,uR1;
+vec3 spec(float w){vec3 c=vec3(0.);if(w<380.||w>750.)return c;
+ if(w<440.)c=vec3((440.-w)/60.,0.,1.);else if(w<490.)c=vec3(0.,(w-440.)/50.,1.);else if(w<510.)c=vec3(0.,1.,(510.-w)/20.);
+ else if(w<580.)c=vec3((w-510.)/70.,1.,0.);else if(w<645.)c=vec3(1.,(645.-w)/65.,0.);else c=vec3(1.,0.,0.);
+ float a=w<420.?.3+.7*(w-380.)/40.:(w>700.?.3+.7*(750.-w)/50.:1.);return c*a;}
+void main(){
+ vec2 q=gl_FragCoord.xy/uRes*2.-1.;q.x*=uRes.x/uRes.y;
+ vec3 d=normalize(uF+q.x*uTan*uR+q.y*uTan*uU);
+ vec3 col=mix(vec3(.028,.036,.05),vec3(.07,.082,.1),smoothstep(-.5,.8,d.z));
+ if(d.z<0.){
+  float t=-uCam.z/d.z;vec3 P=uCam+t*d;float r=length(P.xy);
+  if(r<60.&&r>7.5){
+   vec3 V=normalize(uCam-P),I=normalize(P-uL),Rf=vec3(d.xy,-d.z);
+   vec3 env=mix(vec3(.05,.06,.07),vec3(.34,.36,.40),smoothstep(.0,.95,Rf.z));
+   vec3 rh=vec3(P.xy/r,0.),th=vec3(-rh.y,rh.x,0.);
+   vec3 D=V-I;float dr=dot(D,rh),dt=dot(D,th),s2=uS*uS;
+   float s0=exp(-(dr*dr+dt*dt)/(s2*.5));
+   vec3 c;
+   if(r<22.){c=env*.5+vec3(.045,.05,.058)+vec3(.7)*s0*.4;}
+   else{
+    c=env*uTint+vec3(1.,.98,.95)*s0*1.3;
+    if(r>uR0&&r<uR1){float wt=exp(-dt*dt/s2);float a=abs(dr);
+     for(int m=1;m<=6;m++){c+=spec(uP*a/float(m))*wt*(1.15/float(m));}}
+    c*=1.-.25*smoothstep(58.2,59.6,r);
+   }
+   float edge=smoothstep(60.,59.75,r)*smoothstep(7.5,7.75,r);
+   col=mix(col,c,edge);
+  }
+ }
+ vec3 Ld=normalize(uL-uCam);float ca=max(dot(d,Ld),0.);
+ col+=vec3(1.,.95,.88)*(pow(ca,6000.)*2.+pow(ca,500.)*.1);
+ col=1.-exp(-col*1.7);
+ gl_FragColor=vec4(pow(col,vec3(.9)),1.);
+}`;
+if (gl) {
+  const sh = (t, src) => { const s = gl.createShader(t); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(s)); return s; };
+  prog = gl.createProgram(); gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS)); gl.linkProgram(prog); gl.useProgram(prog);
+  const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(prog, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  ['uRes', 'uCam', 'uF', 'uR', 'uU', 'uL', 'uTint', 'uTan', 'uP', 'uS', 'uR0', 'uR1'].forEach(n => U[n] = gl.getUniformLocation(prog, n));
+} else {
+  $('#rbProbe').textContent = 'This browser has WebGL switched off, so the disc cannot be drawn here.';
+}
+const v3 = {sub: (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]], add: (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]], mul: (a, k) => [a[0] * k, a[1] * k, a[2] * k],
+  dot: (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2], cross: (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]],
+  norm: a => { const l = Math.hypot(a[0], a[1], a[2]); return [a[0] / l, a[1] / l, a[2] / l]; }};
+const TANF = Math.tan(rad(20));
+function camera() {
+  const a = rad(RB.az), e = rad(RB.el);
+  const pos = [RB.dist * Math.cos(e) * Math.cos(a), RB.dist * Math.cos(e) * Math.sin(a), RB.dist * Math.sin(e)];
+  const fwd = v3.norm(v3.sub([0, 0, -6], pos)), right = v3.norm(v3.cross(fwd, [0, 0, 1])), up = v3.cross(right, fwd);
+  const lamp = RB.flash ? v3.add(v3.add(pos, v3.mul(right, 7)), v3.mul(up, 4))
+    : [420 * Math.cos(rad(RB.lel)) * Math.cos(rad(RB.laz)), 420 * Math.cos(rad(RB.lel)) * Math.sin(rad(RB.laz)), 420 * Math.sin(rad(RB.lel))];
+  return {pos, fwd, right, up, lamp};
+}
+function drawRainbow() {
+  if (!gl) return; const cv = RC.cv, k = camera(), f = RB.f;
+  gl.viewport(0, 0, cv.width, cv.height);
+  gl.uniform2f(U.uRes, cv.width, cv.height); gl.uniform3fv(U.uCam, k.pos); gl.uniform3fv(U.uF, k.fwd); gl.uniform3fv(U.uR, k.right); gl.uniform3fv(U.uU, k.up);
+  gl.uniform3fv(U.uL, k.lamp); gl.uniform3fv(U.uTint, f.tint); gl.uniform1f(U.uTan, TANF); gl.uniform1f(U.uP, f.pitch); gl.uniform1f(U.uS, RB.sigma);
+  gl.uniform1f(U.uR0, f.r0 / 1e6); gl.uniform1f(U.uR1, f.r1 / 1e6);
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
+}
+function probe(mx, my) {
+  const k = camera(), f = RB.f, W = RC.W, H = RC.H;
+  const qx = (mx / W * 2 - 1) * W / H, qy = 1 - my / H * 2;
+  const d = v3.norm(v3.add(k.fwd, v3.add(v3.mul(k.right, qx * TANF), v3.mul(k.up, qy * TANF))));
+  const el = $('#rbProbe');
+  if (d[2] >= 0) { el.textContent = 'Point at the disc to see which colour reaches your eye from there.'; return; }
+  const t = -k.pos[2] / d[2], P = v3.add(k.pos, v3.mul(d, t)), r = Math.hypot(P[0], P[1]);
+  if (r > 60 || r < 7.5) { el.textContent = 'Point at the disc to see which colour reaches your eye from there.'; return; }
+  if (r < f.r0 / 1e6 || r > f.r1 / 1e6) { el.innerHTML = `r = ${r.toFixed(1)}${NB}mm: no tracks here, so this part acts as a plain mirror.`; return; }
+  const V = v3.norm(v3.sub(k.pos, P)), I = v3.norm(v3.sub(P, k.lamp)), rh = [P[0] / r, P[1] / r, 0], th = [-rh[1], rh[0], 0];
+  const Dv = v3.sub(V, I), dr = Math.abs(v3.dot(Dv, rh)), dt = v3.dot(Dv, th), wt = Math.exp(-dt * dt / (RB.sigma * RB.sigma));
+  const vis = []; for (let m = 1; m <= 6; m++) { const w = f.pitch * dr / m; if (w >= 380 && w <= 750) vis.push([m, w]); }
+  const need = Math.round(f.pitch * dr);
+  let html = `r = ${r.toFixed(1)}${NB}mm. `;
+  if (wt < 0.25) html += 'The lamp, this point and your eye are not lined up across the tracks, so no diffracted light comes your way.';
+  else if (!vis.length) html += `Lined up, but the first order here would need λ = ${need}${NB}nm, ${need > 750 ? 'beyond red' : 'shorter than violet'}: nothing visible.`;
+  else html += vis.map(([m, w]) => `<span class="swatch" style="background:${rgba(waveRGB(w), 1)}"></span>order ${m}: ${Math.round(w)}${NB}nm (${colourName(w)})`).join('<br>');
+  el.innerHTML = html;
+}
+function syncRb() {
+  const f = RB.f; $('#lazOut').textContent = RB.laz + '°'; $('#lelOut').textContent = RB.lel + '°';
+  $('#lampCtl').style.opacity = RB.flash ? .4 : 1; $('#rbLaz').disabled = $('#rbLel').disabled = RB.flash;
+  $('#rbMax').innerHTML = `With track pitch p = ${f.pitch}${NB}nm the longest wavelength the disc can send back is 2p = ${2 * f.pitch}${NB}nm, and only at grazing angles. ` +
+    (2 * f.pitch < 750 ? 'Red is barely possible; violet to orange need a low, side-on view.' : 'Every visible colour fits, in several orders, so a CD shows rainbows from almost anywhere.');
+  RC.dirty = true;
+}
+RC.cv.addEventListener('pointerdown', e => { RB.drag = {x: e.clientX, y: e.clientY}; RC.cv.setPointerCapture(e.pointerId); });
+RC.cv.addEventListener('pointermove', e => {
+  const r = RC.cv.getBoundingClientRect();
+  if (RB.drag) { RB.az -= (e.clientX - RB.drag.x) * 0.35; RB.el = clamp(RB.el + (e.clientY - RB.drag.y) * 0.25, 4, 89); RB.drag = {x: e.clientX, y: e.clientY}; RC.dirty = true; }
+  probe(e.clientX - r.left, e.clientY - r.top);
+});
+RC.cv.addEventListener('pointerup', () => RB.drag = null);
+RC.cv.addEventListener('wheel', e => { e.preventDefault(); RB.dist = clamp(RB.dist * Math.exp(clamp(e.deltaY, -120, 120) * 0.0012), 110, 520); RC.dirty = true; }, {passive: false});
+seg($('#rbFmt'), v => { RB.f = FMT[v]; syncRb(); });
+$('#rbFlash').addEventListener('change', e => { RB.flash = e.target.checked; syncRb(); });
+$('#rbLaz').addEventListener('input', e => { RB.laz = +e.target.value; syncRb(); });
+$('#rbLel').addEventListener('input', e => { RB.lel = +e.target.value; syncRb(); });
+$('#rbSig').addEventListener('input', e => { RB.sigma = e.target.value / 1000; RC.dirty = true; });
+$('#rbViews').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  const V = {side: {az: -90, el: 24, dist: 150, flash: true}, top: {az: -90, el: 82, dist: 190, flash: false, laz: -40, lel: 55}, across: {az: -90, el: 30, dist: 170, flash: false, laz: 90, lel: 22}}[b.dataset.k];
+  Object.assign(RB, V); $('#rbFlash').checked = RB.flash; $('#rbLaz').value = RB.laz; $('#rbLel').value = RB.lel; syncRb();
+});
+
+/* =====================================================================
+   LASERS
+   ===================================================================== */
+const LC = mkCanvas('lzCanvas'), PH = mkCanvas('phCanvas');
+const LR = {mode: 'read', disc: FMT.BD, lambda: 405, NA: 0.85, depth: 68, play: !reduce, pos: 0, crest: 0, strip: null, tr: null, stale: true,
+  pDisc: FMT.BD, pLam: 650, alpha: 0};
+const NCOV = 1.5;
+
+function buildStrip(f) {
+  const Ls = 240 * f.T, res = f.pitch / 40, nx = Math.ceil(Ls / res), J = 3, ny = (2 * J + 1) * 40, m = new Uint8Array(nx * ny), tracks = [];
+  for (let j = -J; j <= J; j++) {
+    const r = rng(seedOf(j + 11, 5, f.pitch)), pits = []; let u = 2 * f.T, pit = j % 2 === 0;
+    while (u < Ls - 2 * f.T) { const b = Math.min(u + pickRun(f, r) * f.T, Ls - 2 * f.T); if (pit && b - u > f.rmin * f.T * 0.99) pits.push([u, b]); u = b; pit = !pit; }
+    tracks.push({j, pits});
+    const yc = j * f.pitch, hw = f.pitW / 2;
+    for (const [a, b] of pits) {
+      const rr = Math.min(hw, (b - a) / 2);
+      for (let iy = 0; iy < ny; iy++) {
+        const dy = (iy + .5) * res - (J + .5) * f.pitch - yc; if (Math.abs(dy) > hw) continue;
+        const ext = Math.sqrt(Math.max(0, rr * rr - dy * dy)), xa = a + rr - ext, xb = b - rr + ext; if (xb <= xa) continue;
+        for (let ix = Math.max(0, Math.floor(xa / res)); ix < Math.min(nx, Math.ceil(xb / res)); ix++) m[iy * nx + ix] = 1;
+      }
+    }
+  }
+  return {f, Ls, res, nx, ny, J, m, tracks};
+}
+function pitAt(S, x, y) {
+  x = ((x % S.Ls) + S.Ls) % S.Ls; const ix = Math.floor(x / S.res), iy = Math.floor((y + (S.J + .5) * S.f.pitch) / S.res);
+  if (iy < 0 || iy >= S.ny) return 0; return S.m[iy * S.nx + ix];
+}
+function computeTrace() {
+  const S = LR.strip, F = spotOf(LR.lambda, LR.NA), N = 900, phi = 4 * Math.PI * NCOV * LR.depth / LR.lambda;
+  const G = 36, span = 1.3 * F, pts = []; let norm = 0;
+  for (let i = 0; i < G; i++) for (let j = 0; j < G; j++) {
+    const x = -span + 2 * span * (i + .5) / G, y = -span + 2 * span * (j + .5) / G, a = Math.exp(-2 * Math.LN2 * (x * x + y * y) / (F * F));
+    if (a > 0.004) { pts.push(x, y, a); norm += a; }
+  }
+  const tr = new Float32Array(N), land = new Float32Array(N), pit = new Float32Array(N), cp = Math.cos(phi), sp = Math.sin(phi);
+  let lo = 1, hi = 0;
+  for (let k = 0; k < N; k++) {
+    const xs = k * S.Ls / N; let al = 0, ap = 0;
+    for (let i = 0; i < pts.length; i += 3) { if (pitAt(S, xs + pts[i], pts[i + 1])) ap += pts[i + 2]; else al += pts[i + 2]; }
+    al /= norm; ap /= norm; land[k] = al; pit[k] = ap;
+    const R = (al + ap * cp) ** 2 + (ap * sp) ** 2; tr[k] = R; lo = Math.min(lo, R); hi = Math.max(hi, R);
+  }
+  LR.tr = {tr, land, pit, N, lo, hi, phi, F};
+}
+function traceAt(x, arr) { const T = LR.tr, S = LR.strip; let u = (((x % S.Ls) + S.Ls) % S.Ls) / S.Ls * T.N; const i = Math.floor(u) % T.N, j = (i + 1) % T.N, f = u - Math.floor(u); return arr[i] * (1 - f) + arr[j] * f; }
+
+function updateRead() {
+  const T = LR.tr, f = LR.disc, mod = (T.hi - T.lo) / Math.max(T.hi, 1e-6), quarter = LR.lambda / (4 * NCOV);
+  $('#naOut').textContent = LR.NA.toFixed(2); $('#dOut').textContent = `${LR.depth}${NB}nm (λ/4n = ${Math.round(quarter)}${NB}nm)`;
+  let v;
+  if (mod < 0.15) v = `The spot (${Math.round(T.F)}${NB}nm) is too large for these pits: neighbouring pits blur together and the signal hardly changes.`;
+  else if (Math.abs(Math.cos(T.phi / 2)) > 0.6) v = `At this depth the light from the pit floor is not half a wavelength late, so it barely cancels the light from the land.`;
+  else v = `Clear signal: every pit edge shows up as a drop or a rise, and the bits are read from the edges.`;
+  $('#rdVerdict').textContent = v;
+  facts($('#rdFacts'), [['Spot width', Math.round(T.F) + NB + 'nm'], ['Shortest pit', Math.round(f.rmin * f.T) + NB + 'nm'], ['Track pitch', f.pitch + NB + 'nm'],
+    ['Phase from the pit', (T.phi / Math.PI).toFixed(2) + NB + 'π'], ['Signal swing', Math.round(mod * 100) + NB + '%']]);
+}
+function setLaser(l) {
+  LR.lambda = l; LR.NA = {780: 0.45, 650: 0.60, 405: 0.85}[l]; $('#rdNA').value = LR.NA; setSeg($('#rdLaser'), String(l)); LR.stale = true;
+}
+seg($('#lzMode'), v => { LR.mode = v; $('#readSide').hidden = v !== 'read'; $('#ptrSide').hidden = v !== 'pointer'; });
+seg($('#rdDisc'), v => { LR.disc = FMT[v]; LR.depth = LR.disc.depth; $('#rdD').value = LR.depth; LR.stale = true; });
+seg($('#rdLaser'), v => setLaser(+v));
+$('#rdNA').addEventListener('input', e => { LR.NA = +e.target.value; LR.stale = true; });
+$('#rdD').addEventListener('input', e => { LR.depth = +e.target.value; LR.stale = true; });
+$('#rdPlay').addEventListener('click', () => { LR.play = !LR.play; $('#rdPlay').textContent = LR.play ? 'Pause' : 'Play'; });
+$('#rdMatch').addEventListener('click', () => { const f = LR.disc; setLaser(f.lambda); LR.depth = f.depth; $('#rdD').value = f.depth; });
+if (!LR.play) $('#rdPlay').textContent = 'Play';
+
+function drawRead(dt) {
+  const o = LC, c = begin(o), W = o.W, H = o.H, f = LR.disc, S = LR.strip, T = LR.tr;
+  const Lw = 36 * f.T, s = W / Lw, col = waveRGB(LR.lambda);
+  if (LR.play) { LR.pos = (LR.pos + dt * Lw / 8) % S.Ls; LR.crest += dt; }
+  const h1 = Math.round(H * 0.36), h2 = Math.round(H * 0.36), h3 = H - h1 - h2;
+  c.fillStyle = '#0D131A'; c.fillRect(0, 0, W, H);
+
+  // 1. top view
+  c.save(); c.beginPath(); c.rect(0, 0, W, h1); c.clip();
+  c.fillStyle = '#C4CBD3'; c.fillRect(0, 0, W, h1);
+  const yc = h1 / 2;
+  for (const tr of S.tracks) {
+    const y = yc + tr.j * f.pitch * s; if (y < -f.pitW * s || y > h1 + f.pitW * s) continue;
+    for (const [a, b] of tr.pits) for (const sh of [-S.Ls, 0, S.Ls]) {
+      const x0 = W / 2 + (a + sh - LR.pos) * s, x1 = W / 2 + (b + sh - LR.pos) * s; if (x1 < 0 || x0 > W) continue; drawPit(c, x0, x1, y, f.pitW * s);
+    }
+  }
+  const F = T.F, R = 1.3 * F * s, g = c.createRadialGradient(W / 2, yc, 0, W / 2, yc, R);
+  for (let i = 0; i <= 8; i++) { const x = i / 8 * 1.3; g.addColorStop(i / 8, rgba(col, 0.6 * Math.exp(-4 * Math.LN2 * x * x))); }
+  c.fillStyle = g; c.beginPath(); c.arc(W / 2, yc, R, 0, TAU); c.fill();
+  c.setLineDash([5, 4]); c.strokeStyle = rgba(col, 1); c.lineWidth = 1.5; c.beginPath(); c.arc(W / 2, yc, F / 2 * s, 0, TAU); c.stroke(); c.setLineDash([]);
+  label(c, 12, 16, 'Top view of the tracks');
+  label(c, W / 2 + F / 2 * s + 8, yc - F / 2 * s, `spot ${Math.round(F)} nm`);
+  c.restore();
+
+  // 2. side view
+  c.save(); c.beginPath(); c.rect(0, h1, W, h2); c.clip();
+  c.fillStyle = '#121C26'; c.fillRect(0, h1, W, h2);
+  const ys = h1 + h2 * 0.72, dpx = LR.depth * s;
+  const prof = []; for (let x = 0; x <= W + 2; x += 2) { const xa = LR.pos + (x - W / 2) / s; prof.push(pitAt(S, xa, 0)); }
+  c.beginPath(); c.moveTo(0, h1 + h2); prof.forEach((p, i) => { const x = i * 2; c.lineTo(x, ys + (p ? dpx : 0)); }); c.lineTo(W, h1 + h2); c.closePath();
+  c.fillStyle = '#2F343B'; c.fill();
+  c.beginPath(); prof.forEach((p, i) => { const x = i * 2, y = ys + (p ? dpx : 0); if (i === 0) c.moveTo(x, y); else { if (p !== prof[i - 1]) c.lineTo(x, ys + (prof[i - 1] ? dpx : 0)); c.lineTo(x, y); } });
+  c.strokeStyle = '#E8ECF0'; c.lineWidth = 2; c.stroke();
+  // beam envelope
+  const sinT = Math.min(LR.NA / NCOV, 0.98), tanT = sinT / Math.sqrt(1 - sinT * sinT), w0 = F / 2;
+  const wAt = hn => Math.sqrt(w0 * w0 + (hn * tanT) ** 2);
+  const topH = (ys - h1) / s;
+  c.beginPath(); for (let i = 0; i <= 30; i++) { const hn = topH * i / 30; c.lineTo(W / 2 - wAt(hn) * s, ys - hn * s); }
+  for (let i = 30; i >= 0; i--) { const hn = topH * i / 30; c.lineTo(W / 2 + wAt(hn) * s, ys - hn * s); }
+  c.closePath(); c.fillStyle = rgba(col, 0.12); c.fill();
+  // wavefronts
+  const Lam = LR.lambda / NCOV, ph = (LR.crest * Lam * 0.55) % Lam;
+  c.setLineDash([4, 5]); c.strokeStyle = rgba(col, 0.4); c.lineWidth = 1.2;
+  for (let hn = Lam - ph; hn < topH; hn += Lam) { const w = wAt(hn) * s; c.beginPath(); c.moveTo(W / 2 - w, ys - hn * s); c.lineTo(W / 2 + w, ys - hn * s); c.stroke(); }
+  c.setLineDash([]); c.strokeStyle = rgba(col, 0.95); c.lineWidth = 2;
+  for (let hn = ph; hn < topH + Lam; hn += Lam) {
+    const w = wAt(hn) * s; c.beginPath(); let first = true, prev = null;
+    for (let x = Math.max(0, W / 2 - w); x <= Math.min(W, W / 2 + w); x += 2) {
+      const p = pitAt(S, LR.pos + (x - W / 2) / s, 0), y = ys - hn * s + (p ? 2 * dpx : 0);
+      if (y < h1 + 2) { first = true; prev = p; continue; }
+      if (first) { c.moveTo(x, y); first = false; } else { if (p !== prev) c.lineTo(x, ys - hn * s + (prev ? 2 * dpx : 0)); c.lineTo(x, y); }
+      prev = p;
+    }
+    c.stroke();
+  }
+  label(c, 12, h1 + 16, 'Side cut along the track');
+  label(c, 12, h1 + h2 - 14, 'polycarbonate with silver', '#AEB8C3');
+  label(c, W - 12, ys - 14, 'cover layer', '#AEB8C3', 12.5, 'right');
+  c.restore();
+
+  // 3. signal
+  const y3 = h1 + h2, top = y3 + 26, bot = y3 + h3 - 14, yOf = R => bot - R * (bot - top);
+  c.fillStyle = '#0D131A'; c.fillRect(0, y3, W, h3);
+  c.strokeStyle = 'rgba(255,255,255,.18)'; c.setLineDash([3, 4]); c.lineWidth = 1;
+  c.beginPath(); c.moveTo(0, yOf(1)); c.lineTo(W, yOf(1)); c.stroke();
+  const thr = (T.lo + T.hi) / 2; c.strokeStyle = rgba(col, .35); c.beginPath(); c.moveTo(0, yOf(thr)); c.lineTo(W, yOf(thr)); c.stroke(); c.setLineDash([]);
+  c.beginPath(); for (let x = 0; x <= W; x += 2) { const R = traceAt(LR.pos + (x - W / 2) / s, T.tr); x ? c.lineTo(x, yOf(R)) : c.moveTo(x, yOf(R)); }
+  c.strokeStyle = rgba(col, 1); c.lineWidth = 2; c.stroke();
+  const Rn = traceAt(LR.pos, T.tr);
+  c.strokeStyle = 'rgba(255,255,255,.3)'; c.beginPath(); c.moveTo(W / 2, top - 6); c.lineTo(W / 2, bot + 4); c.stroke();
+  c.fillStyle = '#fff'; c.beginPath(); c.arc(W / 2, yOf(Rn), 4, 0, TAU); c.fill();
+  label(c, 12, y3 + 14, 'Light back at the detector');
+  label(c, W - 12, yOf(1) - 9, 'flat mirror', '#8D99A6', 12, 'right');
+  drawPhasor();
+}
+
+function drawPhasor() {
+  const o = PH, c = begin(o), W = o.W, H = o.H, T = LR.tr; if (!T) return;
+  c.fillStyle = '#0D131A'; c.fillRect(0, 0, W, H);
+  const al = traceAt(LR.pos, T.land), ap = traceAt(LR.pos, T.pit), phi = T.phi, Rn = traceAt(LR.pos, T.tr);
+  const r = Math.min(W * 0.36, H * 0.4), ox = W / 2 - r * 0.15, oy = H / 2 + 8, col = waveRGB(LR.lambda);
+  c.strokeStyle = 'rgba(255,255,255,.18)'; c.setLineDash([3, 4]); c.beginPath(); c.arc(ox, oy, r, 0, TAU); c.stroke(); c.setLineDash([]);
+  const arrow = (x0, y0, x1, y1, st, w) => { c.strokeStyle = st; c.fillStyle = st; c.lineWidth = w; c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1, y1); c.stroke();
+    const a = Math.atan2(y1 - y0, x1 - x0), L = Math.hypot(x1 - x0, y1 - y0); if (L < 4) return; const h = Math.min(8, L * .4);
+    c.beginPath(); c.moveTo(x1, y1); c.lineTo(x1 - h * Math.cos(a - .4), y1 - h * Math.sin(a - .4)); c.lineTo(x1 - h * Math.cos(a + .4), y1 - h * Math.sin(a + .4)); c.closePath(); c.fill(); };
+  const lx = ox + al * r, ly = oy, px = lx + ap * r * Math.cos(phi), py = ly - ap * r * Math.sin(phi);
+  arrow(ox, oy, lx, ly, '#C9D1D9', 2.5); arrow(lx, ly, px, py, rgba(col, 1), 2.5); arrow(ox, oy, px, py, '#FFFFFF', 1.5);
+  c.font = `12px ${UI_FONT}`; c.textBaseline = 'middle';
+  c.fillStyle = '#C9D1D9'; c.textAlign = 'center'; c.fillText('from the land', (ox + lx) / 2, oy + 14);
+  c.fillStyle = rgba(col, 1); c.textAlign = 'left'; c.fillText('from the pit', Math.max(lx, px) + 8, (ly + py) / 2);
+  c.fillStyle = '#E4E9EE'; c.textAlign = 'left'; c.fillText(`back to the detector: ${Math.round(Rn * 100)} %`, 10, 14);
+}
+
+function drawPointer() {
+  const o = LC, c = begin(o), W = o.W, H = o.H, f = LR.pDisc, lam = LR.pLam, al = rad(LR.alpha), col = waveRGB(lam);
+  c.fillStyle = '#0D131A'; c.fillRect(0, 0, W, H);
+  const ox = W / 2, oy = H * 0.8, R = Math.min(W * 0.44, H * 0.7);
+  c.strokeStyle = '#2C3845'; c.lineWidth = 1; c.beginPath(); c.arc(ox, oy, R, Math.PI, TAU); c.stroke();
+  c.font = `11.5px ${UI_FONT}`; c.fillStyle = '#5E6B79'; c.textAlign = 'center'; c.textBaseline = 'middle';
+  for (let a = -75; a <= 75; a += 15) { const x = ox + Math.sin(rad(a)) * R, y = oy - Math.cos(rad(a)) * R; c.fillText(Math.abs(a) + '°', ox + Math.sin(rad(a)) * (R + 16), oy - Math.cos(rad(a)) * (R + 16)); c.fillRect(x - 1, y - 1, 2, 2); }
+  c.strokeStyle = 'rgba(255,255,255,.16)'; c.setLineDash([3, 5]); c.beginPath(); c.moveTo(ox, oy); c.lineTo(ox, oy - R); c.stroke(); c.setLineDash([]);
+  // disc
+  c.fillStyle = '#B9C1CA'; c.fillRect(ox - R * 0.5, oy, R, 7); c.fillStyle = '#5C6878';
+  for (let x = ox - R * 0.5; x < ox + R * 0.5; x += 4) c.fillRect(x, oy, 2, 2);
+  label(c, ox, oy + 22, `${f.name}, track pitch ${f.pitch} nm`, '#AEB8C3', 12.5, 'center');
+  // orders
+  const orders = [];
+  for (let m = -14; m <= 14; m++) { const sb = Math.sin(al) + m * lam / f.pitch; if (Math.abs(sb) <= 1) orders.push([m, Math.asin(sb)]); }
+  c.save(); c.globalCompositeOperation = 'lighter';
+  for (const [m, b] of orders) {
+    const ex = ox + Math.sin(b) * R, ey = oy - Math.cos(b) * R, back = Math.abs(b + al) < rad(0.6) && m !== 0;
+    c.strokeStyle = rgba(col, m === 0 ? .9 : .7); c.lineWidth = m === 0 ? 3 : 2; c.beginPath(); c.moveTo(ox, oy); c.lineTo(ex, ey); c.stroke();
+    if (!back) { const g = c.createRadialGradient(ex, ey, 0, ex, ey, 16); g.addColorStop(0, rgba(col, 1)); g.addColorStop(1, rgba(col, 0)); c.fillStyle = g; c.beginPath(); c.arc(ex, ey, 16, 0, TAU); c.fill(); }
+  }
+  // incoming
+  const sx = ox - Math.sin(al) * R, sy = oy - Math.cos(al) * R;
+  c.strokeStyle = rgba(col, 1); c.lineWidth = 3; c.beginPath(); c.moveTo(sx, sy); c.lineTo(ox, oy); c.stroke();
+  c.restore();
+  c.save(); c.translate(sx, sy); c.rotate(Math.atan2(oy - sy, ox - sx));
+  c.fillStyle = '#3A4654'; c.beginPath(); c.roundRect(-46, -7, 46, 14, 4); c.fill(); c.fillStyle = '#5A6878'; c.fillRect(-12, -7, 4, 14); c.restore();
+  for (const [m, b] of orders) {
+    const ex = ox + Math.sin(b) * (R - 30), ey = oy - Math.cos(b) * (R - 30), back = Math.abs(b + al) < rad(0.6) && m !== 0;
+    label(c, ex, ey, back ? `m = ${m}, back to the pointer` : m === 0 ? 'm = 0, mirror' : `m = ${m > 0 ? '+' : '−'}${Math.abs(m)}`, '#E4E9EE', 12, 'center');
+  }
+  return orders;
+}
+function syncPointer() {
+  const f = LR.pDisc, lam = LR.pLam, al = rad(LR.alpha);
+  $('#ptLOut').textContent = lam + NB + 'nm'; $('#ptAOut').textContent = LR.alpha + '°';
+  const rows = []; for (let m = -14; m <= 14; m++) { if (m === 0) continue; const sb = Math.sin(al) + m * lam / f.pitch; if (Math.abs(sb) <= 1) rows.push([`Order ${m > 0 ? '+' : '−'}${Math.abs(m)}`, deg(Math.asin(sb)).toFixed(1) + '°']); }
+  facts($('#ptFacts'), rows.length ? rows : [['Side spots', 'none']]);
+  const lit = lam / (2 * f.pitch);
+  $('#ptNote').textContent = lit <= 1
+    ? `The beam comes straight back to the pointer when sin α = λ/2p, at α = ${deg(Math.asin(lit)).toFixed(1)}°. Measure that angle and you have measured the track pitch.`
+    : `λ/2p is above 1: this wavelength can never be sent back to the pointer by this disc.`;
+}
+seg($('#ptDisc'), v => { LR.pDisc = FMT[v]; syncPointer(); });
+$('#ptL').addEventListener('input', e => { LR.pLam = +e.target.value; syncPointer(); });
+$$('#ptrSide [data-l]').forEach(b => b.addEventListener('click', () => { LR.pLam = +b.dataset.l; $('#ptL').value = LR.pLam; syncPointer(); }));
+$('#ptA').addEventListener('input', e => { LR.alpha = +e.target.value; syncPointer(); });
+$('#ptLittrow').addEventListener('click', () => { const l = LR.pLam / (2 * LR.pDisc.pitch); if (l <= 1) { LR.alpha = Math.round(deg(Math.asin(l)) * 10) / 10; $('#ptA').value = LR.alpha; syncPointer(); } });
+
+function drawLasers(dt) {
+  if (LR.mode === 'read') {
+    if (LR.stale) { if (!LR.strip || LR.strip.f !== LR.disc) LR.strip = buildStrip(LR.disc); computeTrace(); updateRead(); LR.stale = false; }
+    drawRead(dt);
+  } else drawPointer();
+}
+
+/* =====================================================================
+   FABRICATION
+   ===================================================================== */
+const FC = mkCanvas('fabCanvas');
+const STEPS = [
+  {t: 'Clean the glass master', w: 'ISO 5 cleanroom', n: 'once per title', d: 'Ultrasonic bath, deionised-water rinse, nitrogen spin-dry and an oxygen plasma. A 0.5 µm speck left here would cover about two tracks and be copied into every disc.'},
+  {t: 'Sputter the resist', w: 'ISO 5 cleanroom', n: 'once per title', d: '68 nm of inorganic phase-change resist. Its thickness becomes the pit depth, λ/4n, so it is checked by ellipsometry.'},
+  {t: 'Write the spiral with a laser', w: 'ISO 5 cleanroom', n: '1.55 h', d: '405 nm light through an NA 0.95 lens, at 4.92 m/s along the track. The spot is 219 nm wide, but only its hot centre crosses the resist threshold, so the marks can be 149 nm long. 27.4 km of track in about 1.5 h.'},
+  {t: 'Develop', w: 'ISO 5 cleanroom', n: 'once per title', d: 'An alkaline developer dissolves the written marks down to the glass, opening the pits. An AFM checks their depth and the 320 nm pitch.'},
+  {t: 'Sputter a nickel seed', w: 'ISO 5 cleanroom', n: 'once per title', d: 'About 50 nm of nickel makes the insulating glass master conductive, ready for electroplating.'},
+  {t: 'Electroform the stamper', w: 'ISO 5 cleanroom', n: '2.4 h', d: 'In a nickel sulfamate bath at 10 A/dm², Faraday’s law gives 34 nm/s: 0.3 mm in 2.4 h. Peeled off the master, the stamper is a negative: bumps where the master had pits.'},
+  {t: 'Injection-compression moulding', w: 'replication line', n: 'about 4 s per disc', d: 'Hot polycarbonate is injected against the stamper and pressed. The bumps leave pits again, and the whole 27 km spiral is copied in one cycle.'},
+  {t: 'Sputter the reflector', w: 'replication line', n: 'every disc', d: 'A few tens of nanometres of silver alloy, so that the pits reflect the reading laser.'},
+  {t: 'Spin-coat and cure the cover', w: 'replication line', n: 'every disc', d: 'UV-curable resin spun to 0.1 mm and cured with UV light. A cover this thin keeps the NA 0.85 reading spot sharp when the disc tilts.'},
+  {t: 'Hard coat and test', w: 'replication line', n: 'every disc', d: 'A hard coat protects the surface. Every disc is read back, and discs with too many errors are rejected before shipping.'}
+];
+const FP = [[55, 125], [205, 245], [325, 465], [555, 605], [695, 785], [855, 915]];
+const SEGS = (() => { const o = []; let u = 0; for (const [a, b] of FP) { o.push([u, a, 0], [a, b, 1]); u = b; } o.push([u, 1000, 0]); return o; })();
+const isPitU = u => FP.some(([a, b]) => u >= a && u <= b);
+const FB = {i: 0, t: 0, play: false, hold: 0, clock: 0};
+const DUR = 4.2;
+const COL = {glass: '#BCD6E3', resist: '#DDA33F', exposed: '#93501F', dev: 'rgba(110,170,215,.30)', ni: '#8E949C', niHi: '#B2B8BF', pcHot: [229, 137, 76], pc: [214, 208, 194], ag: '#EEF2F5', steel: '#454D56'};
+
+function fabGeom(W, H) {
+  const lw = W > 760 ? 190 : 0, mx = 26, pw = W - 2 * mx - lw;
+  return {lw, mx, pw, X: u => mx + u / 1000 * pw, U: x => (x - mx) / pw * 1000, yb: Math.round(H * 0.58), gT: Math.min(84, H * 0.16), hR: 30, hN: 74, ypc: Math.round(H * 0.5), hPC: 96, hC: 42};
+}
+function atoms(c, g, col, n, y0, y1, time) {
+  c.fillStyle = col;
+  for (let i = 0; i < n; i++) { const u = (i * 137.508) % 1000, ph = (time * 0.9 + i * 0.618) % 1; c.globalAlpha = .9 * (1 - ph * .5); c.beginPath(); c.arc(g.X(u), y0 + (y1 - y0) * ph, 1.7, 0, TAU); c.fill(); }
+  c.globalAlpha = 1;
+}
+function tag(c, g, y, a, b) {
+  if (!g.lw) return; const x = g.X(1000);
+  c.strokeStyle = 'rgba(255,255,255,.28)'; c.lineWidth = 1; c.beginPath(); c.moveTo(x - 10, y); c.lineTo(x + 14, y); c.stroke();
+  c.textAlign = 'left'; c.textBaseline = 'middle'; c.font = `13px ${UI_FONT}`; c.fillStyle = '#DCE2E8'; c.fillText(a, x + 20, b ? y - 8 : y);
+  if (b) { c.font = `12px ${UI_FONT}`; c.fillStyle = '#8D99A6'; c.fillText(b, x + 20, y + 9); }
+}
+function glass(c, g, alpha = 1) {
+  c.globalAlpha = alpha; const gr = c.createLinearGradient(0, g.yb, 0, g.yb + g.gT); gr.addColorStop(0, '#CFE3EE'); gr.addColorStop(1, '#93B4C6');
+  c.fillStyle = gr; c.fillRect(g.X(0), g.yb, g.pw, g.gT); c.globalAlpha = 1;
+}
+function resist(c, g, h, writtenTo, devK, alpha = 1) {
+  c.globalAlpha = alpha;
+  for (const [a, b, p] of SEGS) {
+    if (!p || writtenTo <= a) { c.fillStyle = COL.resist; c.fillRect(g.X(a), g.yb - h, g.X(b) - g.X(a), h); continue; }
+    const e = Math.min(b, writtenTo), hh = h * (1 - devK);
+    c.fillStyle = COL.exposed; c.fillRect(g.X(a), g.yb - hh, g.X(e) - g.X(a), hh);
+    if (e < b) { c.fillStyle = COL.resist; c.fillRect(g.X(e), g.yb - h, g.X(b) - g.X(e), h); }
+  }
+  c.globalAlpha = 1;
+}
+function profileLine(c, g, yLand, yPit) {
+  c.beginPath(); let first = true;
+  for (const [a, b, p] of SEGS) { const y = p ? yPit : yLand; if (first) { c.moveTo(g.X(a), y); first = false; } else c.lineTo(g.X(a), y); c.lineTo(g.X(b), y); }
+}
+function masterArr(g) { const n = Math.ceil(g.pw), arr = new Float32Array(n + 1); for (let i = 0; i <= n; i++) arr[i] = isPitU(i / g.pw * 1000) ? g.yb : g.yb - g.hR; return arr; }
+function dilate(arr, r) {
+  const n = arr.length, out = new Float32Array(n), R = Math.ceil(r);
+  for (let i = 0; i < n; i++) { let m = 1e9; for (let j = Math.max(0, i - R); j <= Math.min(n - 1, i + R); j++) { const dx = j - i, v = arr[j] - Math.sqrt(Math.max(0, r * r - dx * dx)); if (v < m) m = v; } out[i] = m; }
+  return out;
+}
+function niPiece(c, g, arr, top) {
+  const gr = c.createLinearGradient(0, Math.min(...top), 0, g.yb); gr.addColorStop(0, COL.niHi); gr.addColorStop(1, COL.ni);
+  c.fillStyle = gr; c.beginPath(); c.moveTo(g.mx, top[0]); for (let i = 1; i < top.length; i++) c.lineTo(g.mx + i, top[i]);
+  for (let i = arr.length - 1; i >= 0; i--) c.lineTo(g.mx + i, arr[i]); c.closePath(); c.fill();
+}
+function pcSlab(c, g, k = 1, uMax = 1000, topFn) {
+  const col = COL.pcHot.map((h, i) => Math.round(h + (COL.pc[i] - h) * k));
+  c.fillStyle = `rgb(${col})`; c.beginPath(); c.moveTo(g.X(0), g.ypc + g.hPC);
+  const n = Math.ceil(g.pw * Math.min(uMax, 1000) / 1000);
+  for (let i = 0; i <= n; i++) c.lineTo(g.mx + i, topFn ? topFn(i / g.pw * 1000) : (isPitU(i / g.pw * 1000) ? g.ypc + g.hR : g.ypc));
+  c.lineTo(g.mx + n, g.ypc + g.hPC); c.closePath(); c.fill();
+}
+function coverLayer(c, g, from, to, col) {
+  c.fillStyle = col; c.beginPath(); c.moveTo(g.X(from), g.ypc - g.hC);
+  c.lineTo(g.X(to), g.ypc - g.hC);
+  for (let u = to; u >= from; u -= 1000 / g.pw) c.lineTo(g.X(u), isPitU(u) ? g.ypc + g.hR : g.ypc);
+  c.closePath(); c.fill();
+}
+function cone(c, x, yTop, yBot, wTop, wBot, col, a) {
+  const gr = c.createLinearGradient(0, yTop, 0, yBot); gr.addColorStop(0, rgba(col, a * .25)); gr.addColorStop(1, rgba(col, a));
+  c.fillStyle = gr; c.beginPath(); c.moveTo(x - wTop, yTop); c.lineTo(x + wTop, yTop); c.lineTo(x + wBot, yBot); c.lineTo(x - wBot, yBot); c.closePath(); c.fill();
+}
+
+function drawFab(dt) {
+  const o = FC, c = begin(o), W = o.W, H = o.H, g = fabGeom(W, H), i = FB.i;
+  FB.clock += dt;
+  if (reduce) FB.t = 1; else if (FB.t < 1) FB.t = Math.min(1, FB.t + dt / DUR);
+  else if (FB.play) { FB.hold += dt; if (FB.hold > 1.3) { if (i < STEPS.length - 1) goStep(i + 1, true); else { FB.play = false; $('#fabPlay').textContent = 'Play all'; } } }
+  const t = FB.t, time = FB.clock, violet = waveRGB(405);
+  c.fillStyle = '#0D131A'; c.fillRect(0, 0, W, H);
+
+  if (i <= 5) {
+    // master side
+    const devK = i > 3 ? 1 : i === 3 ? ease((t - .15) / .6) : 0;
+    const written = i > 2 ? 1001 : i === 2 ? t * 1060 - 30 : -1;
+    const fadeMaster = i === 5 ? 1 - .65 * ease((t - .68) / .32) : 1;
+    glass(c, g, fadeMaster); tag(c, g, g.yb + g.gT / 2, 'Glass master', 'polished, ultra-clean');
+    if (i === 0) {
+      [90, 240, 400, 520, 690, 820, 950].forEach((u, k) => {
+        const p = ease((t - .08 - k * .05) / .45), sz = 3 + (k % 3) * 1.6;
+        c.globalAlpha = 1 - p; c.fillStyle = '#C9B79C'; c.beginPath(); c.arc(g.X(u), g.yb - sz - p * 150, sz, 0, TAU); c.fill(); c.globalAlpha = 1;
+      });
+      if (t > .55) { const a = .28 * ease((t - .55) / .15) * (.75 + .25 * Math.sin(time * 6)); const gr = c.createLinearGradient(0, g.yb - 120, 0, g.yb); gr.addColorStop(0, 'rgba(150,110,235,0)'); gr.addColorStop(1, `rgba(150,110,235,${a})`); c.fillStyle = gr; c.fillRect(g.X(0), g.yb - 120, g.pw, 120); tag(c, g, g.yb - 60, 'Oxygen plasma', 'removes the last organics'); }
+    }
+    if (i >= 1) {
+      const h = i === 1 ? g.hR * ease(t) : g.hR;
+      if (i === 3) { const a = t < .1 ? t / .1 : t > .85 ? (1 - t) / .15 : 1; c.fillStyle = `rgba(110,170,215,${.32 * a})`; c.fillRect(g.X(0), g.yb - g.hR - 50, g.pw, g.hR + 50); if (a > .3) tag(c, g, g.yb - g.hR - 30, 'Developer', 'dissolves the marks'); }
+      if (i <= 4 || i === 5) resist(c, g, h, written, devK, fadeMaster);
+      if (i === 1) { if (t < .97) atoms(c, g, COL.resist, 60, 40, g.yb - h, time); }
+      tag(c, g, g.yb - g.hR / 2, i >= 3 ? 'Resist with open pits' : 'Phase-change resist', '68 nm = pit depth');
+    }
+    if (i === 2) {
+      const uL = written, x = g.X(clamp(uL, 0, 1000)), on = isPitU(uL);
+      if (uL > 0 && uL < 1000) {
+        cone(c, x, 30, g.yb - g.hR, 58, 6, violet, on ? .85 : .18);
+        if (on) { const gr = c.createRadialGradient(x, g.yb - g.hR, 0, x, g.yb - g.hR, 22); gr.addColorStop(0, 'rgba(255,240,210,.9)'); gr.addColorStop(1, 'rgba(255,200,120,0)'); c.fillStyle = gr; c.beginPath(); c.arc(x, g.yb - g.hR, 22, 0, TAU); c.fill(); }
+      }
+      // threshold inset
+      const bx = g.mx + 10, by = 22, bw = Math.min(230, g.pw * .4), bh = 96, F = 219, thr = 0.726;
+      c.fillStyle = 'rgba(23,32,43,.85)'; c.fillRect(bx, by, bw, bh);
+      const xs = v => bx + 12 + (v + 260) / 520 * (bw - 24), ys = v => by + bh - 16 - v * (bh - 40);
+      c.beginPath(); for (let v = -260; v <= 260; v += 4) { const I = Math.exp(-4 * Math.LN2 * v * v / (F * F)); v === -260 ? c.moveTo(xs(v), ys(I)) : c.lineTo(xs(v), ys(I)); }
+      c.strokeStyle = rgba(violet, 1); c.lineWidth = 1.8; c.stroke();
+      c.setLineDash([3, 3]); c.strokeStyle = '#E8A15A'; c.beginPath(); c.moveTo(xs(-260), ys(thr)); c.lineTo(xs(260), ys(thr)); c.stroke(); c.setLineDash([]);
+      c.fillStyle = 'rgba(232,161,90,.35)'; c.fillRect(xs(-74.5), ys(1), xs(74.5) - xs(-74.5), ys(thr) - ys(1));
+      c.font = `11.5px ${UI_FONT}`; c.textBaseline = 'alphabetic'; c.textAlign = 'left'; c.fillStyle = '#DCE2E8'; c.fillText('laser intensity across the spot', bx + 10, by + 15);
+      c.fillStyle = '#E8A15A'; c.textAlign = 'right'; c.fillText('threshold', bx + bw - 8, ys(thr) - 4);
+      c.fillStyle = '#AEB8C3'; c.textAlign = 'center'; c.fillText('spot 219 nm, mark 149 nm', bx + bw / 2, by + bh - 3);
+    }
+    if (i === 4) {
+      c.strokeStyle = '#A3AAB2'; c.lineWidth = 1 + 2.5 * ease(t); profileLine(c, g, g.yb - g.hR, g.yb); c.stroke();
+      if (t < .97) atoms(c, g, '#AEB4BB', 55, 40, g.yb - g.hR, time);
+      tag(c, g, g.yb - g.hR - 10, 'Nickel seed', 'about 50 nm, conducts');
+    }
+    if (i === 5) {
+      const arr = masterArr(g), gmax = g.hR + g.hN;
+      if (t < .68) {
+        const k = ease(t / .68);
+        c.fillStyle = 'rgba(70,140,130,.14)'; c.fillRect(g.X(0), 20, g.pw, g.yb - 20);
+        c.strokeStyle = '#A3AAB2'; c.lineWidth = 3; profileLine(c, g, g.yb - g.hR, g.yb); c.stroke();
+        if (k > 0.001) niPiece(c, g, arr, dilate(arr, k * gmax));
+        for (let n = 0; n < 26; n++) { const u = (n * 211.7) % 1000, ph = (time * .35 + n * .37) % 1; c.fillStyle = `rgba(160,220,205,${.7 * (1 - ph)})`; c.beginPath(); c.arc(g.X(u), 30 + ph * (g.yb - g.hR - gmax * k - 40), 2, 0, TAU); c.fill(); }
+        c.font = `13px ${UI_FONT}`; c.fillStyle = '#DCE2E8'; c.textAlign = 'left'; c.textBaseline = 'alphabetic';
+        c.fillText(`${(2.4 * k).toFixed(1)} h in the bath, ${(0.3 * k).toFixed(2)} mm of nickel`, g.mx + 10, 26);
+        tag(c, g, g.yb - g.hR - gmax * k / 2, 'Nickel', '34 nm/s from Faraday’s law');
+      } else {
+        const k2 = ease((t - .68) / .32), top = dilate(arr, gmax);
+        const yTop = Math.min(...top), yc = (yTop + g.yb) / 2, lift = k2 * (yc - 30 - (g.yb - yTop) / 2 - 10);
+        c.save(); c.translate(0, -lift); niPiece(c, g, arr, top); c.restore();
+        if (k2 > .9) tag(c, g, yc - lift, 'Stamper', 'a negative: bumps, not pits');
+      }
+    }
+  } else {
+    // replication side
+    if (i === 6) {
+      const off = t < .42 ? -26 : t < .57 ? -26 * (1 - ease((t - .42) / .15)) : t < .75 ? 0 : -ease((t - .75) / .25) * Math.max(0, g.ypc - g.hN - 48);
+      const fill = ease(t / .42), cool = ease((t - .57) / .18);
+      c.fillStyle = COL.steel; c.fillRect(g.X(0) - 8, g.ypc + g.hPC, g.pw + 16, 16);
+      tag(c, g, g.ypc + g.hPC + 8, 'Mould', 'kept below the softening point');
+      if (fill > 0) pcSlab(c, g, cool, fill * 1000, t < .57 ? (u => (isPitU(u) ? g.ypc + g.hR : g.ypc) + off) : null);
+      const sb = u => (isPitU(u) ? g.ypc + g.hR : g.ypc) + off;
+      const gr = c.createLinearGradient(0, g.ypc + off - g.hN, 0, g.ypc + off); gr.addColorStop(0, COL.niHi); gr.addColorStop(1, COL.ni);
+      c.fillStyle = gr; c.beginPath(); c.moveTo(g.X(0), g.ypc + off - g.hN); c.lineTo(g.X(1000), g.ypc + off - g.hN);
+      for (let u = 1000; u >= 0; u -= 1000 / g.pw) c.lineTo(g.X(u), sb(u)); c.closePath(); c.fill();
+      if (t < .9) tag(c, g, g.ypc + off - g.hN / 2, 'Stamper', 'bumps point down');
+      if (fill > .3) tag(c, g, g.ypc + g.hPC / 2, cool < .5 ? 'Molten polycarbonate' : 'Polycarbonate', '1.1 mm, pits pressed in');
+      c.font = `13px ${UI_FONT}`; c.fillStyle = '#DCE2E8'; c.textAlign = 'left'; c.textBaseline = 'alphabetic';
+      c.fillText(`one moulding cycle: ${(4 * t).toFixed(1)} s of about 4 s`, g.mx + 10, 26);
+    } else {
+      pcSlab(c, g); tag(c, g, g.ypc + g.hPC / 2, 'Polycarbonate', '1.1 mm');
+      const agW = i === 7 ? 1 + 2.5 * ease(t) : 3.5;
+      c.strokeStyle = COL.ag; c.lineWidth = agW; profileLine(c, g, g.ypc, g.ypc + g.hR); c.stroke();
+      if (i === 7) { if (t < .97) atoms(c, g, '#DDE3E8', 60, 40, g.ypc, time); tag(c, g, g.ypc - 6, 'Silver alloy', 'a few tens of nm'); }
+      if (i >= 8) {
+        const sp = i === 8 ? ease(t / .5) : 1, cured = i === 8 ? ease((t - .62) / .2) : 1;
+        if (sp > 0) {
+          const a = .5 + .3 * cured, col = `rgba(${Math.round(150 + 20 * cured)},${Math.round(208 + 5 * cured)},${Math.round(226 - 30 * cured)},${a})`;
+          coverLayer(c, g, 500 - 500 * sp, 500 + 500 * sp, col);
+        }
+        if (i === 8 && t > .55 && t < .85) { const a = .2 * Math.sin((t - .55) / .3 * Math.PI); const gr = c.createLinearGradient(0, 20, 0, g.ypc - g.hC); gr.addColorStop(0, rgba(violet, 0)); gr.addColorStop(1, rgba(violet, a)); c.fillStyle = gr; c.fillRect(g.X(0), 20, g.pw, g.ypc - g.hC - 20); if (a > .08) tag(c, g, 60, 'UV lamp', 'cures the resin'); }
+        if (i === 8 && t < .5) { c.font = `13px ${UI_FONT}`; c.fillStyle = '#DCE2E8'; c.textAlign = 'left'; c.textBaseline = 'alphabetic'; c.fillText('spinning spreads the resin outwards', g.mx + 10, 26); }
+        tag(c, g, g.ypc - g.hC / 2 - 4, cured > .5 ? 'Cover layer' : 'Liquid resin', '0.1 mm, UV-cured');
+        if (i === 8) tag(c, g, g.ypc + 16, 'Silver alloy', '');
+      }
+      if (i === 9) {
+        const hc = ease(t / .25); c.fillStyle = '#F3F6F8'; c.fillRect(g.X(0), g.ypc - g.hC - 4 * hc, g.pw * hc, 4 * hc);
+        tag(c, g, g.ypc - g.hC - 18, 'Hard coat', '');
+        if (t > .25) {
+          const k = (t - .25) / .75, uR = k * 1000, x = g.X(uR), on = isPitU(uR);
+          cone(c, x, 20, g.ypc, 60, 5, violet, .75);
+          const bx = g.mx + 10, by = 16, bw = Math.min(250, g.pw * .45), bh = 64;
+          c.fillStyle = 'rgba(23,32,43,.85)'; c.fillRect(bx, by, bw, bh);
+          c.beginPath(); for (let u = 0; u <= uR; u += 4) { const y = by + 20 + (isPitU(u) ? 32 : 6); const xx = bx + 8 + u / 1000 * (bw - 16); u ? c.lineTo(xx, y) : c.moveTo(xx, y); }
+          c.strokeStyle = rgba(violet, 1); c.lineWidth = 1.6; c.stroke();
+          c.font = `11.5px ${UI_FONT}`; c.fillStyle = '#DCE2E8'; c.textAlign = 'left'; c.textBaseline = 'alphabetic';
+          c.fillText(t > .95 ? 'read back: error rate within spec, disc shipped' : 'reading back the disc', bx + 8, by + 14);
+          if (on) { const gr = c.createRadialGradient(x, g.ypc + g.hR, 0, x, g.ypc + g.hR, 16); gr.addColorStop(0, rgba(violet, .5)); gr.addColorStop(1, rgba(violet, 0)); c.fillStyle = gr; c.beginPath(); c.arc(x, g.ypc + g.hR, 16, 0, TAU); c.fill(); }
+        }
+      }
+    }
+  }
+}
+function goStep(i, keepPlay) {
+  FB.i = clamp(i, 0, STEPS.length - 1); FB.t = 0; FB.hold = 0; if (!keepPlay) { FB.play = false; $('#fabPlay').textContent = 'Play all'; }
+  const s = STEPS[FB.i];
+  $('#fabCount').textContent = `Step ${FB.i + 1} of ${STEPS.length}`; $('#fabTitle').textContent = s.t; $('#fabText').textContent = s.d;
+  $('#fabChips').innerHTML = `<span>${s.w}</span><span>${s.n}</span>`;
+  $$('#fabList button').forEach((b, k) => { b.classList.toggle('on', k === FB.i); b.setAttribute('aria-current', k === FB.i ? 'step' : 'false'); });
+  $$('#tbar span').forEach(sp => sp.classList.toggle('on', +sp.dataset.s === FB.i || (+sp.dataset.s === 3 && FB.i === 4)));
+}
+$('#fabList').innerHTML = STEPS.map((s, k) => `<li><button><span class="n">${k + 1}</span><span>${s.t}</span></button></li>`).join('');
+$$('#fabList button').forEach((b, k) => b.addEventListener('click', () => goStep(k)));
+$('#fabPrev').addEventListener('click', () => goStep(FB.i - 1));
+$('#fabNext').addEventListener('click', () => goStep(FB.i + 1));
+$('#fabPlay').addEventListener('click', () => {
+  if (FB.play) { FB.play = false; $('#fabPlay').textContent = 'Play all'; return; }
+  if (FB.i === STEPS.length - 1 && FB.t >= 1) goStep(0, true);
+  FB.play = true; $('#fabPlay').textContent = 'Pause';
+});
+document.addEventListener('keydown', e => {
+  if (active !== 'fab' || e.target.closest('input')) return;
+  if (e.key === 'ArrowRight') goStep(FB.i + 1); else if (e.key === 'ArrowLeft') goStep(FB.i - 1);
+});
+
+/* =====================================================================
+   tabs and loop
+   ===================================================================== */
+let active = 'zoom';
+function show(t) {
+  if (!document.getElementById('tab-' + t)) t = 'zoom';
+  active = t;
+  $$('.tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === t)));
+  $$('.pane').forEach(p => p.hidden = p.id !== 'tab-' + t);
+  canvases.forEach(sizeCanvas);
+  if (location.hash !== '#' + t) history.replaceState(null, '', '#' + t);
+}
+$$('.tabs button').forEach(b => b.addEventListener('click', () => show(b.dataset.tab)));
+window.addEventListener('hashchange', () => show(location.hash.slice(1)));
+
+syncZoom(); syncRb(); syncPointer(); goStep(0);
+show((location.hash || '#zoom').slice(1));
+
+let last = performance.now();
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  if (active === 'zoom') { zoomTween(now); if (ZC.dirty) { drawZoom(); ZC.dirty = false; } }
+  else if (active === 'rainbow') { if (RC.dirty) { drawRainbow(); RC.dirty = false; } }
+  else if (active === 'lasers') drawLasers(dt);
+  else if (active === 'fab') drawFab(dt);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
